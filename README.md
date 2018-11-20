@@ -102,7 +102,7 @@ In both cases of text and embeds, an optional `attributes` key can be defined wi
 { insert: "Text", attributes: { bold: true } }
 
 // Insert a link
-{ insert: "Google", attributes: { href: 'https://www.google.com' } }
+{ insert: "Google", attributes: { link: 'https://www.google.com' } }
 
 // Insert an embed
 {
@@ -197,14 +197,14 @@ Appends an insert operation. Returns `this` for chainability.
 #### Parameters
 
 - `text` - String representing text to insert
-- `embed` - Number representing embed type to insert
+- `embed` - Object representing embed type to insert
 - `attributes` - Optional attributes to apply
 
 #### Example
 
 ```js
 delta.insert('Text', { bold: true, color: '#ccc' });
-delta.insert(1, { src: 'https://octodex.github.com/images/labtocat.png' });
+delta.insert({ image: 'https://octodex.github.com/images/labtocat.png' });
 ```
 
 ---
@@ -337,7 +337,7 @@ var delta = new Delta().insert('Hello\n\n')
                        .insert('\n', { align: 'right' })
                        .insert('!');
 
-delta.eachline(function(line, attributes, i) {
+delta.eachLine(function(line, attributes, i) {
   console.log(line, attributes, i);
   // Can return false to exit loop early
 });
@@ -484,7 +484,7 @@ var results = delta.partition(function(op) {
   return typeof op.insert === 'string';
 });
 var passed = results[0];  // [{ insert: 'Hello', attributes: { bold: true }},
-                              { insert: 'World'}]
+                          //  { insert: 'World'}]
 var failed = results[1];  // [{ insert: { image: 'https://octodex.github.com/images/labtocat.png' }}]
 ```
 
@@ -589,8 +589,8 @@ Transform given Delta against own operations.
 
 #### Methods
 
-- `transform(other, priority)`
-- `transform(index)` - Alias for [`transformPosition`](#tranformposition)
+- `transform(other, priority = false)`
+- `transform(index, priority = false)` - Alias for [`transformPosition`](#tranformposition)
 
 #### Parameters
 
@@ -620,7 +620,7 @@ Transform an index against the delta. Useful for representing cursor/selection p
 
 #### Methods
 
-- `transformPosition(index)`
+- `transformPosition(index, priority = false)`
 
 #### Parameters
 
